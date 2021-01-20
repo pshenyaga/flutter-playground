@@ -32,8 +32,9 @@ class _HomePageState extends State<HomePage> {
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    child: Text(snapshot.data[index].title),
+                  return NewsTile(
+                    title: snapshot.data[index].title,
+                    urlToImage: snapshot.data[index].urlToImage,
                   );
                 },
               );
@@ -62,5 +63,44 @@ Future<List<Article>> fetchArticles() async {
     return result;
   } else {
     throw Exception('Failed to load news');
+  }
+}
+
+class NewsTile extends StatelessWidget {
+  final String title;
+  final String urlToImage;
+
+  NewsTile({this.title, this.urlToImage});
+
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: EdgeInsets.only(bottom: 24),
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (urlToImage != null)
+            Image.network(
+              urlToImage,
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+              fit: BoxFit.cover,
+            ),
+          SizedBox(height: 8),
+          Container(
+            child: Text(
+              title,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
